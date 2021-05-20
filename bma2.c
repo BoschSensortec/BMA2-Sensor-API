@@ -1430,8 +1430,8 @@ int8_t bma2_enable_interrupt(uint32_t int_en, struct bma2_dev *dev)
     if (rslt == BMA2_OK)
     {
         reg_data[0] = BMA2_SET_BITS_POS_0(reg_data[0], BMA2_INT_EN_0, int_en);
-        reg_data[1] = (uint8_t)(BMA2_SET_BITS_POS_0(reg_data[1], BMA2_INT_EN_1, int_en) >> 8);
-        reg_data[2] = (uint8_t)(BMA2_SET_BITS_POS_0(reg_data[2], BMA2_INT_EN_2, int_en) >> 16);
+        reg_data[1] = BMA2_SET_BITS_POS_0(reg_data[1], BMA2_INT_EN_1, int_en >> 8);
+        reg_data[2] = BMA2_SET_BITS_POS_0(reg_data[2], BMA2_INT_EN_2, int_en >> 16);
 
         rslt = bma2_set_regs(BMA2_REG_INT_EN_0, reg_data, 3, dev);
     }
@@ -1544,8 +1544,8 @@ int8_t bma2_set_int_mapping(uint8_t map, uint32_t int_map, struct bma2_dev *dev)
 
                 /* Enable desired interrupts */
                 reg_data[0] = BMA2_SET_BITS_POS_0(reg_data[0], BMA2_INT_MAP_0, int_map);
-                reg_data[1] = (uint8_t)(BMA2_SET_BITS_POS_0(reg_data[1], BMA2_INT_MAP_1, int_map) >> 8);
-                reg_data[2] = (uint8_t)(BMA2_SET_BITS_POS_0(reg_data[2], BMA2_INT_MAP_2, int_map) >> 16);
+                reg_data[1] = BMA2_SET_BITS_POS_0(reg_data[1], BMA2_INT_MAP_1, int_map >> 8);
+                reg_data[2] = BMA2_SET_BITS_POS_0(reg_data[2], BMA2_INT_MAP_2, int_map >> 16);
 
                 break;
 
@@ -1558,8 +1558,8 @@ int8_t bma2_set_int_mapping(uint8_t map, uint32_t int_map, struct bma2_dev *dev)
 
                 /* Write the register value after disabling desired interrupts to register */
                 reg_data[0] = BMA2_SET_BITS_POS_0(reg_data[0], BMA2_INT_MAP_0, int_unmap);
-                reg_data[1] = (uint8_t)(BMA2_SET_BITS_POS_0(reg_data[1], BMA2_INT_MAP_1, int_unmap) >> 8);
-                reg_data[2] = (uint8_t)(BMA2_SET_BITS_POS_0(reg_data[2], BMA2_INT_MAP_2, int_unmap) >> 16);
+                reg_data[1] = BMA2_SET_BITS_POS_0(reg_data[1], BMA2_INT_MAP_1, int_unmap >> 8);
+                reg_data[2] = BMA2_SET_BITS_POS_0(reg_data[2], BMA2_INT_MAP_2, int_unmap >> 16);
 
                 break;
             default:
@@ -1608,6 +1608,7 @@ int8_t bma2_set_int_src(uint8_t filter, uint8_t int_src, struct bma2_dev *dev)
 {
     int8_t rslt;
     uint8_t reg_data;
+    uint8_t int_unfiltered;
 
     rslt = bma2_get_regs(BMA2_REG_INT_SRC, &reg_data, 1, dev);
 
@@ -1619,8 +1620,8 @@ int8_t bma2_set_int_src(uint8_t filter, uint8_t int_src, struct bma2_dev *dev)
                 reg_data = BMA2_SET_BITS_POS_0(reg_data, BMA2_INT_SRC, int_src);
                 break;
             case BMA2_INT_UNFILTERED_DATA:
-                reg_data &= (~(int_src));
-                reg_data = BMA2_SET_BITS_POS_0(reg_data, BMA2_INT_SRC, reg_data);
+                int_unfiltered = reg_data & (~(int_src));
+                reg_data = BMA2_SET_BITS_POS_0(reg_data, BMA2_INT_SRC, int_unfiltered);
                 break;
             default:
                 rslt = BMA2_E_INVALID_CONFIG;

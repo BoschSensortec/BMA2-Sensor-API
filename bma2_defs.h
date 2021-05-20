@@ -662,13 +662,13 @@
 #define BMA2_RESET_INT_MSK                                   UINT8_C(0x80)
 #define BMA2_RESET_INT_POS                                   UINT8_C(0x07)
 
-#define BMA2_INT_EN_0_MSK                                    UINT32_C(0x0000FF)
-#define BMA2_INT_EN_1_MSK                                    UINT32_C(0x00FF00)
-#define BMA2_INT_EN_2_MSK                                    UINT32_C(0xFF0000)
+#define BMA2_INT_EN_0_MSK                                    UINT8_C(0xFF)
+#define BMA2_INT_EN_1_MSK                                    UINT8_C(0xFF)
+#define BMA2_INT_EN_2_MSK                                    UINT8_C(0xFF)
 
-#define BMA2_INT_MAP_0_MSK                                   UINT32_C(0x0000FF)
-#define BMA2_INT_MAP_1_MSK                                   UINT32_C(0x00FF00)
-#define BMA2_INT_MAP_2_MSK                                   UINT32_C(0xFF0000)
+#define BMA2_INT_MAP_0_MSK                                   UINT8_C(0xFF)
+#define BMA2_INT_MAP_1_MSK                                   UINT8_C(0xFF)
+#define BMA2_INT_MAP_2_MSK                                   UINT8_C(0xFF)
 
 #define BMA2_INT_SRC_MSK                                     UINT8_C(0x3F)
 
@@ -729,7 +729,7 @@
 #define BMA2_SET_HIGH_BYTE                                   UINT16_C(0xFF00)
 
 /*! Macro to convert milliseconds to microseconds */
-#define BMA2_MS_TO_US(X)                                     (X * 1000)
+#define BMA2_MS_TO_US(X)                                     ((X) * 1000)
 
 /*! Absolute value */
 
@@ -739,26 +739,26 @@
 
 /* BIT SLICE GET AND SET FUNCTIONS */
 #define BMA2_GET_BITSLICE(regvar, bitname) \
-    ((regvar & bitname##_MSK) >> bitname##_POS)
+    (((regvar) & bitname##_MSK) >> bitname##_POS)
 
 #define BMA2_SET_BITSLICE(regvar, bitname, val) \
-    ((regvar & ~bitname##_MSK) | \
-     ((val << bitname##_POS) & bitname##_MSK))
+    (((regvar) & ~bitname##_MSK) | \
+     (((val) << bitname##_POS) & bitname##_MSK))
 
-#define BMA2_SET_BITS(reg_data, bitname, data)               ((reg_data & ~(bitname##_MSK)) \
-                                                              | ((data << bitname##_POS) & bitname##_MSK))
+#define BMA2_SET_BITS(reg_data, bitname, data)               (((reg_data) & ~(bitname##_MSK)) \
+                                                              | (((data) << bitname##_POS) & bitname##_MSK))
 
-#define BMA2_GET_BITS(reg_data, bitname)                     ((reg_data & (bitname##_MSK)) >> (bitname##_POS))
+#define BMA2_GET_BITS(reg_data, bitname)                     (((reg_data) & (bitname##_MSK)) >> (bitname##_POS))
 
-#define BMA2_SET_BITS_POS_0(reg_data, bitname, data)         ((reg_data & ~(bitname##_MSK)) | (data & bitname##_MSK))
+#define BMA2_SET_BITS_POS_0(reg_data, bitname, data)         (((reg_data) & ~(bitname##_MSK)) | ((data) & bitname##_MSK))
 
-#define BMA2_GET_BITS_POS_0(reg_data, bitname)               (reg_data & (bitname##_MSK))
+#define BMA2_GET_BITS_POS_0(reg_data, bitname)               ((reg_data) & (bitname##_MSK))
 
-#define BMA2_SET_BIT_VAL_0(reg_data, bitname)                (reg_data & ~(bitname##_MSK))
+#define BMA2_SET_BIT_VAL_0(reg_data, bitname)                ((reg_data) & ~(bitname##_MSK))
 
-#define BMA2_GET_LSB(var)                                    (uint8_t)(var & BMA2_SET_LOW_BYTE)
+#define BMA2_GET_LSB(var)                                    (uint8_t)((var) & BMA2_SET_LOW_BYTE)
 
-#define BMA2_GET_MSB(var)                                    (uint8_t)((var & BMA2_SET_HIGH_BYTE) >> 8)
+#define BMA2_GET_MSB(var)                                    (uint8_t)(((var) & BMA2_SET_HIGH_BYTE) >> 8)
 
 /******************************************************************************/
 /*!  @name         TYPEDEF DEFINITIONS                                        */
